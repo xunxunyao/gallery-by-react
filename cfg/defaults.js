@@ -38,19 +38,23 @@ function getDefaultModules() {
       },
       {
         test: /\.less/,
-        loader: 'style-loader!css-loader!less-loader'
+        loader: 'style-loader!css-loader!autoprefixer?{browser:["last 2 version"]}!less-loader'
       },
       {
         test: /\.styl/,
-        loader: 'style-loader!css-loader!stylus-loader'
+        loader: 'style-loader!css-loader!autoprefixer?{browser:["last 2 version"]}!stylus-loader'
       },
       {
-        test: /\.(png|jpg|gif|woff|woff2)$/,
+        test: /\.(png|jpg|gif|woff|woff2|jpeg)$/,
         loader: 'url-loader?limit=8192'
       },
       {
         test: /\.(mp4|ogg|svg)$/,
         loader: 'file-loader'
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
       }
     ]
   };
