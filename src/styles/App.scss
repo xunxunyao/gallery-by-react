@@ -29,6 +29,34 @@ html, body {
   overflow: hidden;
 
   background-color: #ddd;
+
+  @at-root {
+    .img-figure {
+      width: 320px;
+      height: 360px;
+      margin: 0;
+      padding: 40px;
+
+      background-color: #fff;
+
+      box-sizing: border-box;
+
+      img {
+        width: 100%
+      }
+    }
+
+    figcaption {
+      text-align: center;
+
+      .img-title {
+        margin: 20px 0 0 0;
+
+        color: #a7a2a0;
+        font-size: 16px;
+      }
+    }
+  }
 }
 
 /* image-eng */
