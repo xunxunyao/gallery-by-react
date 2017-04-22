@@ -21,8 +21,8 @@ class ImageFigure extends React.Component {
       <figure className="img-figure">
         <img src={this.props.data.imageURL}
               alt={this.props.data.title}/>
-        <figcaption className="img-title">
-          <h2>{this.props.data.title}</h2>
+        <figcaption>
+          <h2 className="img-title">{this.props.data.title}</h2>
         </figcaption>
       </figure>
     );
