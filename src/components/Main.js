@@ -166,7 +166,7 @@ class GalleryByReactApp extends React.Component {
 
     imageDatas.forEach((value, index)=> {
       imgFigures.push(
-        <ImageFigure data={value} ref={'imgFigure' + index}
+        <ImageFigure key={value.imageURL} data={value} ref={'imgFigure' + index}
                      arrange={this.state.imgsArrangeArr[index]}/>)
     });
 
