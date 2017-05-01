@@ -32,8 +32,10 @@ html, body {
 
   @at-root {
     .img-figure {
-      width: 320px;
-      height: 360px;
+      position: absolute;
+
+      width: 380px;
+      height: 310px;
       margin: 0;
       padding: 40px;
 
