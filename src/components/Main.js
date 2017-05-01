@@ -21,11 +21,22 @@ function getRangeRandom([low, high]) {
   return Math.ceil(Math.random() * (high - low) + low);
 }
 
+//获取0-30度之间的一个任意正负值
+function get30DegRandom() {
+  return((Math.random()>0.5?'':'-'+Math.ceil(Math.random()*30)));
+}
 //图片组件
 class ImageFigure extends React.Component {
   render() {
     let styleObj = {};
+    //图片位置
     this.props.arrange.pos && (styleObj = this.props.arrange.pos);
+    //图片角度
+    if(this.props.arrange.rotate){
+      (['Moz','Ms','Webkit'].forEach(value=>{
+        styleObj[value+'Transform']='rotate('+this.props.arrange.rotate+'deg)';
+      }))
+    }
     return (
       <figure className="img-figure" style={styleObj}>
         <img src={this.props.data.imageURL}
@@ -48,7 +59,8 @@ class GalleryByReactApp extends React.Component {
         pos: {
           left: 0,
           right: 0
-        }
+        },
+        rotate:0
       });
     });
 
@@ -74,15 +86,21 @@ class GalleryByReactApp extends React.Component {
     //居中centerIndex的图片
     imgsArrangeCenters[0].pos = Constant.centerPos;
 
+    //居中的图片不需要旋转
+    imgsArrangeCenters[0].rotate=0;
+
     //取出要布局上侧的图片状态信息
     topImgSpliceIndex = Math.floor(Math.random() * (imgsArranges.length - topImgNum));
     imgsArrangeTops = imgsArranges.splice(topImgSpliceIndex, topImgNum);
 
     //布局位于上侧的图片
-    imgsArrangeTops.forEach((value)=> {
-      value.pos = {
-        top: getRangeRandom(Constant.vPosRange.topY),
-        left: getRangeRandom(Constant.vPosRange.x)
+    imgsArrangeTops.forEach((value,index)=> {
+      imgsArrangeTops[index] = {
+        pos:{
+          top: getRangeRandom(Constant.vPosRange.topY),
+          left: getRangeRandom(Constant.vPosRange.x)
+        },
+        rotate:get30DegRandom()
       }
     });
 
@@ -91,9 +109,12 @@ class GalleryByReactApp extends React.Component {
 
       //前半部分布局左边，后半部分布局右边
       hPosRangeLORX = i < k ? Constant.hPosRange.leftSecX : Constant.hPosRange.rightSecX;
-      imgsArranges[i].pos = {
-        top: getRangeRandom(Constant.hPosRange.y),
-        left: getRangeRandom(hPosRangeLORX)
+      imgsArranges[i]= {
+        pos:{
+          top: getRangeRandom(Constant.hPosRange.y),
+          left: getRangeRandom(hPosRangeLORX)
+        },
+        rotate:get30DegRandom()
       }
     }
 
