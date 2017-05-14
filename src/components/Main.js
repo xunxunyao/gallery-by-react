@@ -38,7 +38,6 @@ class ImageFigure extends React.Component {
       this.props.center();
     }
 
-
     e.stopPropagation();
     e.preventDefault();
   };
@@ -77,6 +76,33 @@ class ImageFigure extends React.Component {
         </div>
       </figure>
     );
+  }
+}
+
+//控制组件
+class ControllerUnit extends React.Component {
+  handleClick = (e)=> {
+    if (this.props.arrange.isCenter) {
+      this.props.inverse();
+    } else {
+      this.props.center();
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  render() {
+    var controllerUnitClassName = 'controller-unit';
+
+    //居中图片，控制按钮显示居中状态
+    if (this.props.arrange.isCenter) {
+      controllerUnitClassName += ' is-center';
+      this.props.arrange.isInverse && (controllerUnitClassName += ' is-inverse');
+    }
+    return (
+      <span className={controllerUnitClassName} onClick={this.handleClick}></span>
+    )
   }
 }
 
@@ -252,8 +278,13 @@ class GalleryByReactApp extends React.Component {
     imageDatas.forEach((value, index)=> {
       imgFigures.push(
         <ImageFigure key={value.imageURL} data={value} ref={'imgFigure' + index}
-                     arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)}
-                     center={this.center(index)}/>)
+                     arrange={this.state.imgsArrangeArr[index]}
+                     inverse={this.inverse(index)}
+                     center={this.center(index)}/>);
+      controllerUnit.push(
+        <ControllerUnit arrange={this.state.imgsArrangeArr[index]}
+                        inverse={this.inverse(index)}
+                        center={this.center(index)}/>)
     });
 
     return (

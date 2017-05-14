@@ -34,7 +34,7 @@ function getDefaultModules() {
       },
       {
         test: /\.scss/,
-        loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version"]}!sass-loader?outputStyle=expanded'
+        loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version","firefox 15"]}!sass-loader?outputStyle=expanded'
       },
       {
         test: /\.less/,
@@ -42,7 +42,7 @@ function getDefaultModules() {
       },
       {
         test: /\.styl/,
-        loader: 'style-loader!css-loader!autoprefixer?-loader{browsers:["last 2 version"]}!stylus-loader'
+        loader: 'style-loader!css-loader!autoprefixer?-loader{browsers:["last 2 version","firefox 15"]}!stylus-loader'
       },
       {
         test: /\.(png|jpg|gif|woff|woff2|jpeg)$/,
