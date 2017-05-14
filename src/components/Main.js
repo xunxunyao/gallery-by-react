@@ -23,27 +23,50 @@ function getRangeRandom([low, high]) {
 
 //获取0-30度之间的一个任意正负值
 function get30DegRandom() {
-  return((Math.random()>0.5?'':'-'+Math.ceil(Math.random()*30)));
+  return ((Math.random() > 0.5 ? '' : '-' + Math.ceil(Math.random() * 30)));
 }
 //图片组件
 class ImageFigure extends React.Component {
+
+  /**
+   * imgFigure的点击处理函数
+   */
+  handleClick = (e)=> {
+    this.props.inverse();
+
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
   render() {
     let styleObj = {};
+
     //图片位置
     this.props.arrange.pos && (styleObj = this.props.arrange.pos);
+
     //图片角度
-    if(this.props.arrange.rotate){
-      (['Moz','Ms','Webkit'].forEach(value=>{
-        styleObj[value+'Transform']='rotate('+this.props.arrange.rotate+'deg)';
+    if (this.props.arrange.rotate) {
+      (['Moz', 'Ms', 'Webkit'].forEach(value=> {
+        styleObj[value + 'Transform'] = 'rotate(' + this.props.arrange.rotate + 'deg)';
       }))
     }
+
+    //图片正反面
+    let imgFigureClassName = 'img-figure';
+    imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
+
     return (
-      <figure className="img-figure" style={styleObj}>
+      <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
         <img src={this.props.data.imageURL}
              alt={this.props.data.title}/>
         <figcaption>
           <h2 className="img-title">{this.props.data.title}</h2>
         </figcaption>
+        <div className="img-back" onClick={this.handleClick}>
+          <p>
+            {this.props.data.desc}
+          </p>
+        </div>
       </figure>
     );
   }
@@ -54,13 +77,14 @@ class GalleryByReactApp extends React.Component {
   constructor(props) {
     super(props);
     let imgPosArr = [];
-    imageDatas.forEach(() =>{
+    imageDatas.forEach(() => {
       imgPosArr.push({
-        pos: {
+        pos: {//位置
           left: 0,
           right: 0
         },
-        rotate:0
+        rotate: 0,//旋转角度
+        isInverse: false //图片正反面,false正面
       });
     });
 
@@ -68,6 +92,23 @@ class GalleryByReactApp extends React.Component {
       //初始化每一个图片的状态对象
       imgsArrangeArr: imgPosArr
     }
+  }
+
+  /**
+   * 翻转图片
+   * @param index 输入当前被执行inverse操作的图片对应的图片信息数组的index值
+   * @return {Function}这是一个闭包函数，期内return一个真正带被执行的函数
+   */
+  inverse(index) {
+    return function () {
+      let imgsArrangeArr = this.state.imgsArrangeArr;
+
+      imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+      this.setState({
+        imgsArrangeArr: imgsArrangeArr
+      })
+
+    }.bind(this);
   }
 
   /**
@@ -87,20 +128,20 @@ class GalleryByReactApp extends React.Component {
     imgsArrangeCenters[0].pos = Constant.centerPos;
 
     //居中的图片不需要旋转
-    imgsArrangeCenters[0].rotate=0;
+    imgsArrangeCenters[0].rotate = 0;
 
     //取出要布局上侧的图片状态信息
     topImgSpliceIndex = Math.floor(Math.random() * (imgsArranges.length - topImgNum));
     imgsArrangeTops = imgsArranges.splice(topImgSpliceIndex, topImgNum);
 
     //布局位于上侧的图片
-    imgsArrangeTops.forEach((value,index)=> {
+    imgsArrangeTops.forEach((value, index)=> {
       imgsArrangeTops[index] = {
-        pos:{
+        pos: {
           top: getRangeRandom(Constant.vPosRange.topY),
           left: getRangeRandom(Constant.vPosRange.x)
         },
-        rotate:get30DegRandom()
+        rotate: get30DegRandom()
       }
     });
 
@@ -109,12 +150,12 @@ class GalleryByReactApp extends React.Component {
 
       //前半部分布局左边，后半部分布局右边
       hPosRangeLORX = i < k ? Constant.hPosRange.leftSecX : Constant.hPosRange.rightSecX;
-      imgsArranges[i]= {
-        pos:{
+      imgsArranges[i] = {
+        pos: {
           top: getRangeRandom(Constant.hPosRange.y),
           left: getRangeRandom(hPosRangeLORX)
         },
-        rotate:get30DegRandom()
+        rotate: get30DegRandom()
       }
     }
 
@@ -188,7 +229,7 @@ class GalleryByReactApp extends React.Component {
     imageDatas.forEach((value, index)=> {
       imgFigures.push(
         <ImageFigure key={value.imageURL} data={value} ref={'imgFigure' + index}
-                     arrange={this.state.imgsArrangeArr[index]}/>)
+                     arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)}/>)
     });
 
     return (
